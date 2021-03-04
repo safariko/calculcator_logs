@@ -1,1 +1,0 @@
-# calculcator_logs
