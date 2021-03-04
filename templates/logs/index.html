@@ -1,0 +1,122 @@
+{% extends "logs/base.html" %}
+{% block content %}
+<div>
+    <form method="POST" action="{% url 'index' %}">
+        {% csrf_token %}
+        <div>
+            <div>
+                <table>
+                    <tr>
+                        <td><input id="input_calc" name="input" onkeypress="this.style.width = ((this.value.length + 1) * 15) + 'px';" style="text-align: right; width: 240px; height: 80px; font-size: x-large;" /></td>
+                        <td style="width: 7px; height: 5px;"></td>
+                        <td><a href="{% url 'index' %}" class="btn btn-danger fontsize" style="width: 79px; height: 80px; line-height: 60px;">C</a></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 7 " onclick="input.value += '7'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 8 " onclick="input.value += '8'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 9 " onclick="input.value += '9'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" * " onclick="input.value += '*'" /></td>
+                    </tr>
+                    <tr>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 4 " onclick="input.value += '4'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 5 " onclick="input.value += '5'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 6 " onclick="input.value += '6'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" / " onclick="input.value += '/'" /></td>
+                    </tr>
+                    <tr>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 1 " onclick="input.value += '1'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 2 " onclick="input.value += '2'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 3 " onclick="input.value += '3'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" - " onclick="input.value += '-'" /></td>
+                    </tr>
+                    <tr>
+                        <td><input class="btn btn-info fontsize" type="button" value=" 0 " onclick="input.value += '0'" /></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" . " onclick="input.value += '.'" /></td>
+                        <td><button id="equal_sign" class="btn btn-info fontsize" style="width: 80px; height: 80px;" type="submit">=</button></td>
+                        <td><input class="btn btn-info fontsize" type="button" value=" + " onclick="input.value += '+'" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <hr />
+        <div>
+            {% if error %}
+            <h4 class="lead" style="display: block;">{{ error }} {{ answer }}</h4>
+            {% endif %}
+        </div>
+        <hr />
+    </form>
+</div>
+<div id="logs">
+    <h4 class="my-0 font-weight-normal">Logs</h4>
+    <ul list-unstyled mt-3 mb-4>
+        {% for calculation in calculations %}
+        <li class="lead">{{ calculation }}</li>
+        {% empty %}
+        <li class="lead">No calculations have been made yet.</li>
+        {% endfor %}
+    </ul>
+
+    <td></td>
+
+    {% if calculations %}
+    <form method="POST" action="{% url 'deletelogs' %}">
+        {% csrf_token %}
+        <button class="btn btn-danger fontsize" style="width: 160px; margin: 20px; height: 60px;" type="submit">Delete Logs</button>
+    </form>
+    {%  endif %}
+
+</div>
+    
+<style>
+    table {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h4 {
+        text-align: center;
+    }
+    .fontsize {
+        font-size: x-large;
+    }
+    input {
+        height: 80px;
+        width: 80px;
+    }
+</style>
+<script>
+    $(document).ready(
+
+        function first(){
+        var input;
+        input=document.getElementById('input_calc');
+        input.value={{result}}}
+        );
+</script>
+<script>
+    $(document).ready(function second() {
+        setInterval(function () {
+            $("#logs").load(window.location.href + " #logs");
+        }, 1000);
+    });
+    $("#body").on("keypress", function keypress (event) {
+        var input=document.getElementById('input_calc');
+        if (event.which > 41 && event.which < 58) {
+            var c = String.fromCharCode(event.which);
+            input.value+=c;
+        };
+    });
+    $("#body").on("keypress", function equalSign(event) {
+        var equal=document.getElementById('equal_sign');
+        if (event.which == 13) {
+            equal.click();
+        }
+    });
+</script>
+
+
+{% endblock %}
